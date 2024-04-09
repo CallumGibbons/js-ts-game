@@ -16,11 +16,14 @@ h1 {
   height: 70vh;
   width: 90vw;
   background: white;
-  overflow: none;
+  overflow: hidden;
   box-shadow: 0 0 50px 5px #d904ffc2;
 }
 .crosshair {
+  position: absolute;
   background-color: red;
+  top: 50%;
+  left: 50%;
   width: 5px;
   height: 5px;
   box-shadow: 15px 0, 20px 0, 25px 0, -15px 0, -20px 0, -25px 0, 0 15px, 0 20px,
