@@ -12,6 +12,9 @@ h1 {
   color: white;
 }
 #gameContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   cursor: none;
   height: 70vh;
   width: 90vw;
@@ -30,6 +33,12 @@ h1 {
   box-shadow: 15px 0, 20px 0, 25px 0, -15px 0, -20px 0, -25px 0, 0 15px, 0 20px,
     0 25px, 0 -15px, 0 -20px, 0 -25px;
 }
+
+.targetRow {
+  position:relative;
+  width: 120vw;
+  height: 20%;
+}
+
 .footer {
-  
 }
