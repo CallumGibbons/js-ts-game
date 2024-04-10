@@ -34,11 +34,10 @@ h1 {
     0 25px, 0 -15px, 0 -20px, 0 -25px;
 }
 
-.targetRow {
-  position:relative;
-  width: 120vw;
-  height: 20%;
-}
-
-.footer {
+.target {
+  height: 50px;
+  width: 50px;
+  img {
+    object-fit: contain;
+  }
 }
