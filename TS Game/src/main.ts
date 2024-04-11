@@ -10,22 +10,27 @@ let accuracy: number = (shotsMissed / totalShots) * 100;
 let roundTimer: number = 30;
 let dificutyScale: number = 1;
 
+const start = document.querySelector(".gameButtonStart")
 const gunshot = document.querySelector("audio");
-const crosshair = document.querySelector("[data-crosshair]");
-const gameContainer = document.querySelector("#gameContainer");
+const crosshair = document.querySelector<HTMLDataElement>("[data-crosshair]");
+const gameContainer = document.querySelector<HTMLDivElement>("#gameContainer");
 
 if (!crosshair || !gameContainer || !gunshot) {
   throw new Error("Issue with selectors");
 }
 
-gameContainer.addEventListener("click", (event) => {
+
+
+gameContainer.addEventListener("click", click => {
+  gunshot.volume = 0.2;
   gunshot.currentTime = 0;
   gunshot.play();
 });
 
-gameContainer.addEventListener("mousemove", function (event) {
+gameContainer.addEventListener("mousemove", function (event: MouseEvent) {
   const userX = event.clientX;
   const userY = event.clientY;
+console.log(event);
 
   crosshair.style.transition = "0s";
   crosshair.style.left = `${userX}px`;
