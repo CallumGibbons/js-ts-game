@@ -1,25 +1,15 @@
 import "./style.css";
-import { countdown } from "./countdown";
-import { crosshair } from "./crosshair";
-import { gameContainer } from "./crosshair";
-import { target } from "./target";
-import { widthMin } from "./target";
-import { heightMin } from "./target";
-import { widthMax } from "./target";
-import { heightMax } from "./target";
-import { hittableTarget } from "./target";
-
-let roundCounter = 0;
-let gameState = 0;
-let score: number = 0;
-export let shotsHit: number = 0;
-let totalShots: number = 0;
-let shotsMissed: number = totalShots - shotsHit;
-export let targetScore: number = 150;
-let accuracy: number = (shotsMissed / totalShots) * 100;
-let roundTimer: number = 30;
-export let difficultyScale: number = 1;
-let timeLeft = 30;
+import { startCountdown } from "./countdown";
+import { gameContainer, crosshair } from "./crosshair";
+import {
+  targetsHit,
+  hittableTarget,
+  heightMax,
+  widthMax,
+  heightMin,
+  widthMin,
+  target,
+} from "./target";
 
 const startText = document.querySelector<HTMLDivElement>("#gameText--Start");
 const startButton =
@@ -27,6 +17,20 @@ const startButton =
 const resetButton =
   document.querySelector<HTMLButtonElement>("#gameButtonReset");
 const gunshot = document.querySelector<HTMLAudioElement>("audio");
+const stats = document.querySelector<HTMLHeadingElement>(
+  "#gameStats"
+) as HTMLElement;
+
+let scoreGoal = 1500;
+let storedScore = 0;
+
+let roundCounter = 0;
+let gameState = 0;
+export let shotsHit: number = 0;
+let totalShots: number = 0;
+const targetScore: number = 150;
+const currentScore = targetsHit * targetScore;
+export let difficultyScale: number = 1;
 
 if (
   !crosshair ||
@@ -35,23 +39,38 @@ if (
   !target ||
   !startText ||
   !startButton ||
-  !resetButton
+  !resetButton ||
+  !stats
 ) {
   throw new Error("Issue with selectors");
 }
 
+const roundPass = () => {
+  roundCounter + 1;
+  storedScore += currentScore;
+  currentScore == 0;
+  difficultyScale - 0.1;
+  scoreGoal * 1.2;
+};
+
+const roundFail = () => {
+  roundCounter = 0;
+  storedScore = 0;
+  currentScore == 0;
+  difficultyScale = 1;
+  scoreGoal = 1500;
+};
+
 const roundStart = () => {
   if ((gameState = 1)) {
     hittableTarget();
-    timeLeft = 0;
     target.style.display = "none";
     startText.style.display = "inherit";
     setTimeout(function () {
-      timeLeft = -1;
       startText.style.display = "none";
       target.style.display = "inherit";
+      startCountdown(30 * difficultyScale);
     }, 3000);
-    countdown();
     target.style.left = Math.random() * (widthMax - widthMin) + widthMin + "%";
     target.style.top =
       Math.random() * (heightMax - heightMin) + heightMin + "%";
@@ -59,31 +78,44 @@ const roundStart = () => {
   }
 };
 
-startButton.addEventListener("click", (_click: MouseEvent) => {
+const startClicked = () => {
   difficultyScale == 1;
   gameState += 1;
   roundStart();
-  totalShots == 0;
-});
-
-gameContainer.addEventListener("click", (_click: MouseEvent) => {
+  if (currentScore >= targetScore) {
+    roundPass();
+  } else if (currentScore < targetScore) {
+    roundFail;
+  }
+}
+const bulletShot = () => {
   totalShots = totalShots + 1;
   gunshot.volume = 0.2;
   gunshot.currentTime = 0;
   gunshot.play();
   console.log(totalShots);
-});
+  console.log(targetsHit);
+  stats.innerHTML =
+    "Shots Fired:" +
+    totalShots +
+    " Points:" +
+    targetsHit * targetScore +
+    " Accuracy: " +
+    ((targetsHit / totalShots) * 100).toFixed(3) +
+    "%";
+};
 
-resetButton.addEventListener("click", (_click: MouseEvent) => {
+const resetClicked= () => {
   roundCounter = 0;
   gameState = 0;
-  score = 0;
   shotsHit = 0;
   totalShots = 0;
-  shotsMissed = 0;
-  targetScore = 150;
-  accuracy = 0;
-  roundTimer = 30;
   difficultyScale = 1;
   target.style.display = "none";
-});
+  startCountdown(0);
+};
+
+
+startButton.addEventListener("click", startClicked);
+resetButton.addEventListener("click", resetClicked);
+gameContainer.addEventListener("click", bulletShot)
