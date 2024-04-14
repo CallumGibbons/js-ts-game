@@ -1,5 +1,11 @@
 import "./style.css";
 
+
+const timerId = setInterval(countdown, 1000);
+let widthMin = 15;
+let widthMax = 85;
+let heightMin = 10;
+let heightMax = 75;
 let roundCounter = 0;
 let gameState = 0;
 let score: number = 0;
@@ -20,7 +26,7 @@ const startButton =
   document.querySelector<HTMLButtonElement>("#gameButtonStart");
 const resetButton =
   document.querySelector<HTMLButtonElement>("#gameButtonReset");
-const target = document.querySelector<HTMLDivElement>(".target");
+const target = document.querySelector<HTMLDivElement>(".target") as HTMLElement;
 const gunshot = document.querySelector<HTMLAudioElement>("audio");
 const crosshair = document.querySelector<HTMLDataElement>("[data-crosshair]");
 const gameContainer = document.querySelector<HTMLDivElement>("#gameContainer");
@@ -38,7 +44,7 @@ if (
   throw new Error("Issue with selectors");
 }
 
-var timerId = setInterval(countdown, 1000);
+
 
 function countdown() {
   if (timeLeft == -1) {
@@ -49,24 +55,33 @@ function countdown() {
   }
 }
 
-startButton.addEventListener("click", (click: MouseEvent) => {
+startButton.addEventListener("click", (_click: MouseEvent) => {
   gameState += 1;
-  if (gameState == 1) {
+  if (gameState = 1) {
     startText.style.display = "inherit";
     setTimeout(function () {
       startText.style.display = "none";
+      target.style.display = "inherit";
+      return countdown();
     }, 3000);
-    target.style.display = "inherit";
-    countdown()
+    gameState = 0;
+    timeLeft = 30
+    return countdown()
+    
   } else {
-    totalShots == 0;
-    gameState == 0;
+    totalShots = 0;
+    gameState = 0;
     target.style.display = "none";
   }
   console.log(gameState);
 });
 
 target.addEventListener("click", (_click: MouseEvent) => {
+  target.style.transition = "1s";
+  target.style.left = (Math.random()) * (widthMax-widthMin) + widthMin +"%";
+  target.style.top = (Math.random()) * (heightMax-heightMin) + heightMin +"%";
+  console.log(target.style.top)
+  console.log(target.style.left)
   targetsHit += 1;
   shotsHit += 1;
   currentScore = currentScore + targetScore;
@@ -91,13 +106,13 @@ gameContainer.addEventListener("mousemove", function (event: MouseEvent) {
   crosshair.style.left = `${userX}px`;
   crosshair.style.top = `${userY}px`;
 });
-document.onmouseout = (event) => {
+document.onmouseout = (_event) => {
   crosshair.style.transition = "1s";
   crosshair.style.left = "50%";
   crosshair.style.top = "50%";
 };
 
-resetButton.addEventListener("click", (click: MouseEvent) => {
+resetButton.addEventListener("click", (_click: MouseEvent) => {
   roundCounter = 0;
   gameState = 0;
   score = 0;
