@@ -1,26 +1,47 @@
 import "./style.css";
 
+let gameState = 0;
+const startBlinkTime = 1000;
 let score: number = 0;
 let shotsHit: number = 0;
-let shotsMissed: number = 0;
+let totalShots: number = 0;
+let shotsMissed: number = totalShots - shotsHit;
 let currentScore: number = 0;
 let targetsHit: number = 0;
 let targetScore: number = 150;
-let totalShots: number = 0;
 let accuracy: number = (shotsMissed / totalShots) * 100;
-let roundTimer: number = 30;
-let dificutyScale: number = 1;
+let roundTimer: number = 30000;
+let difficultyScale: number = 1;
 
+const startText = document.querySelector<HTMLDivElement>("#gameText--Start");
+const startButton =
+  document.querySelector<HTMLButtonElement>("#gameButtonStart");
 const target = document.querySelector<HTMLDivElement>(".target");
-const gunshot = document.querySelector("audio");
+const gunshot = document.querySelector<HTMLAudioElement>("audio");
 const crosshair = document.querySelector<HTMLDataElement>("[data-crosshair]");
 const gameContainer = document.querySelector<HTMLDivElement>("#gameContainer");
 
-if (!crosshair || !gameContainer || !gunshot || !target) {
+if (
+  !crosshair ||
+  !gameContainer ||
+  !gunshot ||
+  !target ||
+  !startText ||
+  !startButton
+) {
   throw new Error("Issue with selectors");
 }
 
+startButton.addEventListener("click", (click: MouseEvent) => {
+  target.style.display = "inherit";
+  (startText.style.visibility =
+    startText.style.visibility == "hidden" ? "" : "hidden"),
+    startBlinkTime;
+});
+
 target.addEventListener("click", (click: MouseEvent) => {
+  targetsHit + 1;
+  shotsHit + 1;
   currentScore = currentScore + targetScore;
   console.log(currentScore);
 });
