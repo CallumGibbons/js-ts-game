@@ -41,9 +41,8 @@ startButton.addEventListener("click", (click: MouseEvent) => {
   gameState += 1;
   if (gameState == 1) {
     target.style.display = "inherit";
-    (startText.style.visibility =
-      startText.style.visibility == "hidden" ? "" : "hidden"),
-      startBlinkTime;
+    startText.style.display = "inherit";
+    setTimeout(function() { startText.style.display="none"; }, 3000)
   } else {
     totalShots == 0;
     gameState == 0;
