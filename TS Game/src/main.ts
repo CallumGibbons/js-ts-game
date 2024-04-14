@@ -1,5 +1,6 @@
 import "./style.css";
 
+let roundCounter = 0;
 let gameState = 0;
 const startBlinkTime = 1000;
 let score: number = 0;
@@ -10,12 +11,13 @@ let currentScore: number = 0;
 let targetsHit: number = 0;
 let targetScore: number = 150;
 let accuracy: number = (shotsMissed / totalShots) * 100;
-let roundTimer: number = 30000;
+let roundTimer: number = 30;
 let difficultyScale: number = 1;
 
+const timerCounter = document.querySelector<HTMLParagraphElement>("#timer");
 const startText = document.querySelector<HTMLDivElement>("#gameText--Start");
-const startButton =
-  document.querySelector<HTMLButtonElement>("#gameButtonStart");
+const startButton = document.querySelector<HTMLButtonElement>("#gameButtonStart");
+const resetButton = document.querySelector<HTMLButtonElement>("#gameButtonReset");
 const target = document.querySelector<HTMLDivElement>(".target");
 const gunshot = document.querySelector<HTMLAudioElement>("audio");
 const crosshair = document.querySelector<HTMLDataElement>("[data-crosshair]");
@@ -27,23 +29,46 @@ if (
   !gunshot ||
   !target ||
   !startText ||
-  !startButton
+  !startButton ||
+  !timerCounter ||
+  !timer ||
+  !resetButton
 ) {
   throw new Error("Issue with selectors");
 }
 
 startButton.addEventListener("click", (click: MouseEvent) => {
-  target.style.display = "inherit";
-  (startText.style.visibility =
-    startText.style.visibility == "hidden" ? "" : "hidden"),
-    startBlinkTime;
+  gameState += 1;
+  if (gameState == 1) {
+    target.style.display = "inherit";
+    (startText.style.visibility =
+      startText.style.visibility == "hidden" ? "" : "hidden"),
+      startBlinkTime;
+  } else {
+    totalShots == 0;
+    gameState == 0;
+    target.style.display = "none";
+  }
+  console.log(gameState);
 });
 
+function timer() {
+  var sec = 30;
+  var timer = setInterval(function () {
+    document.getElementById('timer').innerHTML = "00:" + sec;
+    sec--;
+    if (sec < 0) {
+      clearInterval(timer);
+    }
+  }, 1000);
+}
+
 target.addEventListener("click", (click: MouseEvent) => {
-  targetsHit + 1;
-  shotsHit + 1;
+  targetsHit += 1;
+  shotsHit += 1;
   currentScore = currentScore + targetScore;
   console.log(currentScore);
+  console.log(targetsHit);
 });
 
 gameContainer.addEventListener("click", (click: MouseEvent) => {
@@ -68,3 +93,20 @@ document.onmouseout = (event) => {
   crosshair.style.left = "50%";
   crosshair.style.top = "50%";
 };
+
+
+resetButton.addEventListener("click", (click: MouseEvent) => {
+  roundCounter = 0;
+  gameState = 0;
+  score = 0;
+  shotsHit = 0;
+  totalShots = 0;
+  shotsMissed = 0;
+  currentScore = 0;
+  targetsHit = 0;
+  targetScore = 150;
+  accuracy = 0;
+  roundTimer = 30;
+  difficultyScale = 1;
+  target.style.display = "none";
+})
