@@ -26,23 +26,23 @@ const startButton = document.querySelector<HTMLButtonElement>(
 const resetButton = document.querySelector<HTMLButtonElement>(
   "#gameButtonReset"
 ) as HTMLElement;
-const gunshot = document.querySelector<HTMLAudioElement>(
+export const gunshot = document.querySelector<HTMLAudioElement>(
   "audio"
 ) as HTMLAudioElement;
 const stats = document.querySelector<HTMLHeadingElement>(
   "#gameStats"
 ) as HTMLElement;
 
+let totalTargets: number = 0;
 let isPaused: boolean = false;
 let isTargetHittable: boolean = true;
 let scoreGoal: number = 1500;
 let storedScore: number = 0;
 let roundCounter: number = 0;
-let gameState: number = 0;
 let totalShots: number = 0;
 export let difficultyScale: number = 1;
 const targetScore: number = 150;
-let currentScore: number = 0;
+let currentScore: number = (targetsHit * targetScore);
 
 const displayRoundNumber = (roundCounter: number) => {
   startText.textContent = `Round ${roundCounter}`;
@@ -56,6 +56,9 @@ const displayRoundNumber = (roundCounter: number) => {
 
 const roundPass = () => {
   target.style.display = "none";
+  totalTargets += targetsHit;
+  storedScore += currentScore;
+  currentScore = 0;
   resetTargetsHit();
   scoreGoal *= 1.2;
   isPaused = true;
@@ -76,7 +79,6 @@ const roundPass = () => {
 
 const roundFail = () => {
   target.style.display = "none";
-  gameState = 0;
   roundCounter = 0;
   storedScore = 0;
   difficultyScale = 1;
@@ -95,48 +97,43 @@ const gameRunning = () => {
   if (!isPaused) {
     const timeLeft = getTimeLeft();
     if (timeLeft <= 0) {
-      if (targetsHit * targetScore >= scoreGoal) {
+      if (currentScore >= scoreGoal) {
         roundPass();
       } else {
         roundFail();
       }
       stopGame();
-    } else if (targetsHit * targetScore >= scoreGoal) {
+    } else if (currentScore >= scoreGoal) {
       roundPass();
     }
   }
 };
 
 const roundStart = () => {
-  if (gameState == 1) {
-    hittableTarget();
-    startText.style.display = "inherit";
-    target.style.display = "none"; // Hide the target initially
+  hittableTarget();
+  startText.style.display = "inherit";
+  target.style.display = "none"; // Hide the target initially
 
-    // Show the round number text after 3 seconds
+  // Show the round number text after 3 seconds
+  setTimeout(() => {
+    startText.textContent = `Round ${roundCounter + 1}`;
+
+    // Display the target and start the timer after another 3 seconds
     setTimeout(() => {
-      startText.textContent = `Round ${roundCounter + 1}`;
+      startText.style.display = "none";
+      if (isTargetHittable) {
+        target.style.display = "inherit"; // Display the target if hittable
+        startCountdown(); // Start the timer after the delay
+      }
+    }, 3000); // Wait for 3 seconds before displaying the target
+  }, 3000); // Wait for 3 seconds before updating the round text
 
-      // Display the target and start the timer after another 3 seconds
-      setTimeout(() => {
-        startText.style.display = "none";
-        if (isTargetHittable) {
-          target.style.display = "inherit"; // Display the target if hittable
-          startCountdown(); // Start the timer after the delay
-        }
-      }, 3000); // Wait for 3 seconds before displaying the target
-    }, 3000); // Wait for 3 seconds before updating the round text
-
-    target.style.left = Math.random() * (widthMax - widthMin) + widthMin + "%";
-    target.style.top =
-      Math.random() * (heightMax - heightMin) + heightMin + "%";
-    gameState = 0;
-  }
+  target.style.left = Math.random() * (widthMax - widthMin) + widthMin + "%";
+  target.style.top = Math.random() * (heightMax - heightMin) + heightMin + "%";
 };
 
 const startClicked = () => {
-  difficultyScale = 1;
-  gameState = 1;
+  resetClicked();
   roundStart();
   setInterval(gameRunning, 1000);
 };
@@ -150,23 +147,20 @@ const bulletShot = () => {
     stats.innerHTML = `Round Number: ${
       roundCounter + 1
     } Shots Fired: ${totalShots} Current Points: ${currentScore} Target Score: ${scoreGoal} Total Points: ${storedScore} Accuracy: ${(
-      (targetsHit / totalShots) *
+      (totalTargets / totalShots) *
       100
     ).toFixed(3)}%`;
   }
 };
 
 const resetClicked = () => {
-  target.style.display = "none";
   totalShots = 0;
   resetTargetsHit();
   roundCounter = 0;
-  gameState = 0;
   currentScore = 0;
-  scoreGoal = 0;
+  scoreGoal = 1500;
   storedScore = 0;
   difficultyScale = 1;
-  scoreGoal = 1500;
   isPaused = false;
   isTargetHittable = true;
   startText.style.display = "none";
