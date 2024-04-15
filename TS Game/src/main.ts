@@ -55,20 +55,23 @@ const displayRoundNumber = (roundCounter: number) => {
 };
 
 const roundPass = () => {
-  roundCounter++;
+  target.style.display = "none";
+  resetTargetsHit();
+  scoreGoal *= 1.2;
+  isPaused = true;
+  isTargetHittable = false;
+  roundCounter += 1;
   storedScore += currentScore; // Store the current score at the end of the round
   currentScore = 0; // Reset current score to zero
   difficultyScale -= 0.1;
-  if (storedScore >= scoreGoal) {
-    resetTargetsHit();
-    scoreGoal *= 1.2;
-    isPaused = true;
-    isTargetHittable = false;
+  stopTimer();
+  setTimeout(() => {
+    displayRoundNumber(roundCounter + 1);
+    // Hide the target and pause/reset the timer
+    target.style.display = "inherit";
+    startCountdown();
     roundStart();
-    setTimeout(() => {
-      displayRoundNumber(roundCounter + 1);
-    }, 3000);
-  }
+  }, 3000);
 };
 
 const roundFail = () => {
@@ -104,22 +107,25 @@ const gameRunning = () => {
 };
 
 const roundStart = () => {
-  if (gameState === 1) {
+  if (gameState == 1) {
     hittableTarget();
     startText.style.display = "inherit";
-    target.style.display = "none";
+    target.style.display = "none"; // Hide the target initially
+
+    // Show the round number text after 3 seconds
     setTimeout(() => {
       startText.textContent = `Round ${roundCounter + 1}`;
+
+      // Display the target and start the timer after another 3 seconds
       setTimeout(() => {
         startText.style.display = "none";
         if (isTargetHittable) {
           target.style.display = "inherit"; // Display the target if hittable
           startCountdown(); // Start the timer after the delay
-        } else {
-          target.style.display = "none"; // Hide the target if not hittable
         }
       }, 3000); // Wait for 3 seconds before displaying the target
     }, 3000); // Wait for 3 seconds before updating the round text
+
     target.style.left = Math.random() * (widthMax - widthMin) + widthMin + "%";
     target.style.top =
       Math.random() * (heightMax - heightMin) + heightMin + "%";
@@ -137,11 +143,12 @@ const startClicked = () => {
 const bulletShot = () => {
   if (!isPaused && isTargetHittable) {
     totalShots++;
-    currentScore += targetScore; // Increment current score with each shot
     gunshot.volume = 0.2;
     gunshot.currentTime = 0;
     gunshot.play();
-    stats.innerHTML = `Round Number: ${roundCounter} Shots Fired: ${totalShots} Current Points: ${currentScore} Target Score: ${scoreGoal} Total Points: ${storedScore} Accuracy: ${(
+    stats.innerHTML = `Round Number: ${
+      roundCounter + 1
+    } Shots Fired: ${totalShots} Current Points: ${currentScore} Target Score: ${scoreGoal} Total Points: ${storedScore} Accuracy: ${(
       (targetsHit / totalShots) *
       100
     ).toFixed(3)}%`;
@@ -149,10 +156,13 @@ const bulletShot = () => {
 };
 
 const resetClicked = () => {
+  target.style.display = "none";
   totalShots = 0;
   resetTargetsHit();
   roundCounter = 0;
   gameState = 0;
+  currentScore = 0;
+  scoreGoal = 0;
   storedScore = 0;
   difficultyScale = 1;
   scoreGoal = 1500;
