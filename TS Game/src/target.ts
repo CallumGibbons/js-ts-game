@@ -1,6 +1,5 @@
 // Importing necessary functions from main.ts
 import { difficultyScale } from "./main";
-import { gunshot } from "./main";
 
 // setting initial variables to keep track of targets hit and target X and Y range
 export let targetsHit: number = 0;
