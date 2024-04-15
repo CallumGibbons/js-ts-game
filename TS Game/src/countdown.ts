@@ -14,7 +14,7 @@ export function countdown(): void {
   if (timeLeft === 0) {
     clearTimeout(timerId);
   } else {
-    timerCounter.innerHTML = timeLeft + " seconds remaining";
+    timerCounter.innerHTML = Math.floor(timeLeft) + " seconds remaining";
     timeLeft--;
   }
 }

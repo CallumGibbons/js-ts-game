@@ -75,6 +75,7 @@ const roundPass = () => {
 };
 
 const roundFail = () => {
+  target.style.display = "none";
   gameState = 0;
   roundCounter = 0;
   storedScore = 0;
@@ -93,7 +94,7 @@ const stopGame = () => {
 const gameRunning = () => {
   if (!isPaused) {
     const timeLeft = getTimeLeft();
-    if (timeLeft === 0) {
+    if (timeLeft <= 0) {
       if (targetsHit * targetScore >= scoreGoal) {
         roundPass();
       } else {
