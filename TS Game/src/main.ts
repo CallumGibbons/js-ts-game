@@ -2,6 +2,7 @@ import "./style.css";
 import { getTimeLeft, startCountdown, timerCounter } from "./countdown";
 import { gameContainer, crosshair } from "./crosshair";
 import {
+  resetTargetsHit,
   targetsHit,
   hittableTarget,
   heightMax,
@@ -29,7 +30,6 @@ let gameState = 0;
 export let shotsHit: number = 0;
 let totalShots: number = 0;
 const targetScore: number = 150;
-const currentScore = targetsHit * targetScore;
 export let difficultyScale: number = 1;
 
 if (
@@ -47,34 +47,39 @@ if (
 }
 
 const roundPass = () => {
-  roundCounter + 1;
-  storedScore += currentScore;
-  currentScore == 0;
-  difficultyScale - 0.1;
-  scoreGoal * 1.2;
+  roundCounter++;
+  storedScore += targetsHit * targetScore;
+  difficultyScale -= 0.1;
+  scoreGoal *= 1.2;
+  if (storedScore >= scoreGoal) {
+    resetTargetsHit();
+    roundStart();
+  }
 };
 
 const roundFail = () => {
   gameState = 0;
   roundCounter = 0;
   storedScore = 0;
-  currentScore == 0;
   difficultyScale = 1;
   scoreGoal = 1500;
 };
 
 const gameRunning = () => {
-  getTimeLeft();
-  if (currentScore >= scoreGoal && timeLeft == 0) {
+  timeLeft = getTimeLeft();
+  if (timeLeft === 0) {
+    if ((targetsHit * targetScore) >= scoreGoal) {
+      roundPass();
+    } else {
+      roundFail();
+    }
+  } else if ((targetsHit * targetScore)>= scoreGoal) {
     roundPass();
-  } else currentScore < scoreGoal && timeLeft == 0;
-  {
-    roundFail();
   }
 };
 
 const roundStart = () => {
-  if ((gameState = 1)) {
+  if (gameState === 1) {
     hittableTarget();
     target.style.display = "none";
     startText.style.display = "inherit";
@@ -91,21 +96,19 @@ const roundStart = () => {
 };
 
 const startClicked = () => {
-  difficultyScale == 1;
-  gameState += 1;
-  while (gameState == 1) {
-    roundStart();
+  difficultyScale = 1;
+  gameState = 1;
+  roundStart();
+  setInterval(() => {
     gameRunning();
-  }
+  }, 1000);
 };
+
 const bulletShot = () => {
-  totalShots = totalShots + 1;
+  totalShots++;
   gunshot.volume = 0.2;
   gunshot.currentTime = 0;
   gunshot.play();
-  console.log(totalShots);
-  console.log(targetsHit);
-  console.log(getTimeLeft());
   stats.innerHTML =
     "Shots Fired:" +
     totalShots +

@@ -21,3 +21,7 @@ export const hittableTarget = () => {
     console.log(targetsHit);
   });
 };
+
+export function resetTargetsHit() {
+    targetsHit = 0;
+  }
