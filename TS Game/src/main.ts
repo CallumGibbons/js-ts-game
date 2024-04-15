@@ -134,7 +134,7 @@ const bulletShot = () => {
     totalShots++;
     gunshot.volume = 0.2;
     gunshot.currentTime = 0;
-    var Accuracy = (storedScore) / (totalShots*targetScore) * 100;
+    var Accuracy = (storedScore / (totalShots * targetScore)) * 100;
     gunshot.play();
     stats.innerHTML = `Round Number: ${
       roundCounter + 1
@@ -150,6 +150,8 @@ const scoreIncrease = () => {
 };
 
 const resetClicked = () => {
+  isPaused = false;
+  isTargetHittable = true;
   totalShots = 0;
   resetTargetsHit();
   roundCounter = 0;
