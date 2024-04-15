@@ -1,11 +1,11 @@
-import "./style.css";
+import "./style.css"; // Import CSS styles
 import {
   stopTimer,
   getTimeLeft,
   startCountdown,
   timerCounter,
-} from "./countdown";
-import { gameContainer } from "./crosshair";
+} from "./countdown"; // Import timer-related functions
+import { gameContainer } from "./crosshair"; // Import game container
 import {
   resetTargetsHit,
   targetsHit,
@@ -15,8 +15,9 @@ import {
   heightMin,
   widthMin,
   target,
-} from "./target";
+} from "./target"; // Import target-related functions and variables
 
+// Select DOM elements
 const startText = document.querySelector<HTMLDivElement>(
   "#gameText--Start"
 ) as HTMLElement;
@@ -33,6 +34,7 @@ const stats = document.querySelector<HTMLHeadingElement>(
   "#gameStats"
 ) as HTMLElement;
 
+// Define game variables
 let totalTargets: number = 0;
 let isPaused: boolean = false;
 let isTargetHittable: boolean = true;
@@ -44,6 +46,7 @@ export let difficultyScale: number = 1;
 const targetScore: number = 150;
 let currentScore: number = 0;
 
+// Function to display the round number text
 const displayRoundNumber = (roundCounter: number) => {
   startText.textContent = `Round ${roundCounter}`;
   startText.style.display = "inherit";
@@ -54,6 +57,7 @@ const displayRoundNumber = (roundCounter: number) => {
   }, 3000);
 };
 
+// Function to handle passing a round
 const roundPass = () => {
   target.style.display = "none";
   totalTargets += targetsHit;
@@ -75,6 +79,7 @@ const roundPass = () => {
   }, 3000);
 };
 
+// Function to stop the game
 const stopGame = () => {
   isPaused = true;
   isTargetHittable = false;
@@ -84,6 +89,7 @@ const stopGame = () => {
   target.style.display = "none";
 };
 
+// Function to handle game running logic
 const gameRunning = () => {
   if (!isPaused) {
     const timeLeft = getTimeLeft();
@@ -100,6 +106,7 @@ const gameRunning = () => {
   }
 };
 
+// Function to start a new round
 const roundStart = () => {
   isPaused = false;
   hittableTarget();
@@ -120,15 +127,18 @@ const roundStart = () => {
     }, 3000); // Wait for 3 seconds before displaying the target
   }, 3000); // Wait for 3 seconds before updating the round text
 
+  // Randomly position the target within the game container
   target.style.left = Math.random() * (widthMax - widthMin) + widthMin + "%";
   target.style.top = Math.random() * (heightMax - heightMin) + heightMin + "%";
 };
 
+// Event handler for start button click
 const startClicked = () => {
   roundStart();
   setInterval(gameRunning, 1000);
 };
 
+// Event handler for target hit
 const bulletShot = () => {
   if (!isPaused && isTargetHittable) {
     totalShots++;
@@ -144,11 +154,13 @@ const bulletShot = () => {
   }
 };
 
+// Function to increase score when target is hit
 const scoreIncrease = () => {
   currentScore += targetScore;
   storedScore += targetScore;
 };
 
+// Event handler for reset button click
 const resetClicked = () => {
   isPaused = false;
   isTargetHittable = true;
@@ -168,7 +180,14 @@ const resetClicked = () => {
   ).toFixed(3)}%`;
 };
 
+// Event listener for target click event
 target.addEventListener("click", scoreIncrease);
+
+// Event listener for start button click event
 startButton.addEventListener("click", startClicked);
+
+// Event listener for reset button click event
 resetButton.addEventListener("click", resetClicked);
+
+// Event listener for game container click event (shooting)
 gameContainer.addEventListener("click", bulletShot);
