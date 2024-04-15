@@ -108,7 +108,6 @@ const gameRunning = () => {
 
 // Function to start a new round
 const roundStart = () => {
-  isPaused = false;
   hittableTarget();
   startText.style.display = "inherit";
   target.style.display = "none"; // Hide the target initially
@@ -162,6 +161,7 @@ const scoreIncrease = () => {
 
 // Event handler for reset button click
 const resetClicked = () => {
+  stopTimer();
   isPaused = false;
   isTargetHittable = true;
   totalShots = 0;
@@ -173,7 +173,6 @@ const resetClicked = () => {
   difficultyScale = 1;
   startText.innerText = "";
   timerCounter.innerHTML = "";
-  stopTimer();
   stats.innerHTML = `Round Number: ${roundCounter} Shots Fired: ${totalShots} Current Points: ${currentScore} Target Score: ${scoreGoal} Total Points: ${storedScore} Accuracy: ${(
     (targetsHit / totalShots) *
     100

@@ -1,7 +1,7 @@
 export const timerCounter = document.querySelector("#timer") as HTMLElement;
 import { difficultyScale } from "./main";
 
-let timeLeft: number = 30;
+export let timeLeft: number = 30;
 let timerId: ReturnType<typeof setInterval>;
 
 export function startCountdown(): void {
@@ -25,4 +25,5 @@ export function getTimeLeft(): number {
 
 export function stopTimer(): void {
     clearInterval(timerId);
+    timeLeft = 30;
 }
