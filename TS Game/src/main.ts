@@ -23,7 +23,7 @@ const startText = document.querySelector<HTMLDivElement>(
 ) as HTMLElement;
 const startButton = document.querySelector<HTMLButtonElement>(
   "#gameButtonStart"
-) as HTMLElement;
+) as HTMLButtonElement;
 const resetButton = document.querySelector<HTMLButtonElement>(
   "#gameButtonReset"
 ) as HTMLElement;
@@ -133,6 +133,7 @@ const roundStart = () => {
 
 // Event handler for start button click
 const startClicked = () => {
+  startButton.disabled = true;
   roundStart();
   setInterval(gameRunning, 1000);
 };
@@ -161,6 +162,8 @@ const scoreIncrease = () => {
 
 // Event handler for reset button click
 const resetClicked = () => {
+  target.style.display="none";
+  startButton.disabled = false;
   stopTimer();
   isPaused = false;
   isTargetHittable = true;
