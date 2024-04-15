@@ -3,12 +3,16 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://github.com/CallumGibbons/js-ts-game/tree/main/TS%20Game",
+  "author": "Callum Gibbons",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy":"gh-pages -d dist"
   },
   "devDependencies": {
+    "gh-pages": "^6.1.1",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"
   }
