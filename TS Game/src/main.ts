@@ -162,7 +162,7 @@ const scoreIncrease = () => {
 
 // Event handler for reset button click
 const resetClicked = () => {
-  target.style.display="none";
+  target.style.display = "none";
   startButton.disabled = false;
   stopTimer();
   isPaused = false;
