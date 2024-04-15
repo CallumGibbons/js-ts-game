@@ -1,4 +1,6 @@
-import "./style.css"; // Import CSS styles
+import "./style.css"; // Import main body CSS styles
+import "./buttons.css"; // Import button CSS styles
+import "./textStyles.css"; // Import text CSS styles
 import {
   stopTimer,
   getTimeLeft,
@@ -74,7 +76,6 @@ const roundPass = () => {
     displayRoundNumber(roundCounter + 1);
     // Hide the target and pause/reset the timer
     target.style.display = "inherit";
-    startCountdown();
     roundStart();
   }, 3000);
 };

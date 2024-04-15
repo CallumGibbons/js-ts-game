@@ -1,0 +1,43 @@
+/* Styling for the game text that flashes */
+.gameText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    color: red; /* Setting the text color to red */
+    font-size: 3em;
+  }
+  
+  /* Styling for game stats */
+  #gameStats {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #ffffff; /* Setting the text color to white */
+    background-color: rgba(
+      0,
+      0,
+      0,
+      0.7
+    ); /* Adding a semi-transparent black background for better viewing */
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  /* Styling for the timer */
+  #timer {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-family: Arial, sans-serif;
+    font-size: 24px;
+    color: #ffffff; /* Setting the text color to white */
+    background-color: rgba(
+      0,
+      0,
+      0,
+      0.7
+    ); /* Adding a semi-transparent black background also for better viewing*/
+    padding: 5px 10px;
+    border-radius: 5px;
+  }

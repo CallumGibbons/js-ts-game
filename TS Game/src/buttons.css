@@ -1,0 +1,31 @@
+/* Styling for buttons */
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Styling for start button */
+  #gameButtonStart {
+    background-color: #008cba;
+  }
+  
+  /* Hover styling for start and reset buttons */
+  #gameButtonStart:hover,
+  #gameButtonReset:hover {
+    background-color: #4caf50; /* Changing background color on hover */
+    color: white; /* Changing text color on hover */
+  }
+  
+  /* Styling for reset button */
+  #gameButtonReset {
+    background-color: #f44336;
+  }
