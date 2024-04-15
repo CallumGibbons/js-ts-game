@@ -42,7 +42,7 @@ let roundCounter: number = 0;
 let totalShots: number = 0;
 export let difficultyScale: number = 1;
 const targetScore: number = 150;
-let currentScore: number = (targetsHit * targetScore);
+let currentScore: number = 0;
 
 const displayRoundNumber = (roundCounter: number) => {
   startText.textContent = `Round ${roundCounter}`;
@@ -57,14 +57,12 @@ const displayRoundNumber = (roundCounter: number) => {
 const roundPass = () => {
   target.style.display = "none";
   totalTargets += targetsHit;
-  storedScore += currentScore;
   currentScore = 0;
   resetTargetsHit();
   scoreGoal *= 1.2;
   isPaused = true;
   isTargetHittable = false;
   roundCounter += 1;
-  storedScore += currentScore; // Store the current score at the end of the round
   currentScore = 0; // Reset current score to zero
   difficultyScale -= 0.1;
   stopTimer();
@@ -77,20 +75,13 @@ const roundPass = () => {
   }, 3000);
 };
 
-const roundFail = () => {
-  target.style.display = "none";
-  roundCounter = 0;
-  storedScore = 0;
-  difficultyScale = 1;
-  scoreGoal = 1500;
-};
-
 const stopGame = () => {
   isPaused = true;
   isTargetHittable = false;
   stopTimer();
   startText.textContent = `Final Score: ${storedScore}`;
   startText.style.display = "inherit";
+  target.style.display = "none";
 };
 
 const gameRunning = () => {
@@ -100,7 +91,7 @@ const gameRunning = () => {
       if (currentScore >= scoreGoal) {
         roundPass();
       } else {
-        roundFail();
+        stopGame();
       }
       stopGame();
     } else if (currentScore >= scoreGoal) {
@@ -110,6 +101,7 @@ const gameRunning = () => {
 };
 
 const roundStart = () => {
+  isPaused = false;
   hittableTarget();
   startText.style.display = "inherit";
   target.style.display = "none"; // Hide the target initially
@@ -133,7 +125,6 @@ const roundStart = () => {
 };
 
 const startClicked = () => {
-  resetClicked();
   roundStart();
   setInterval(gameRunning, 1000);
 };
@@ -143,14 +134,19 @@ const bulletShot = () => {
     totalShots++;
     gunshot.volume = 0.2;
     gunshot.currentTime = 0;
+    var Accuracy = (storedScore) / (totalShots*targetScore) * 100;
     gunshot.play();
     stats.innerHTML = `Round Number: ${
       roundCounter + 1
-    } Shots Fired: ${totalShots} Current Points: ${currentScore} Target Score: ${scoreGoal} Total Points: ${storedScore} Accuracy: ${(
-      (totalTargets / totalShots) *
-      100
-    ).toFixed(3)}%`;
+    } Shots Fired: ${totalShots} Current Points: ${currentScore} Target Score: ${scoreGoal} Total Points: ${storedScore} Accuracy: ${Accuracy.toFixed(
+      3
+    )}%`;
   }
+};
+
+const scoreIncrease = () => {
+  currentScore += targetScore;
+  storedScore += targetScore;
 };
 
 const resetClicked = () => {
@@ -161,9 +157,7 @@ const resetClicked = () => {
   scoreGoal = 1500;
   storedScore = 0;
   difficultyScale = 1;
-  isPaused = false;
-  isTargetHittable = true;
-  startText.style.display = "none";
+  startText.innerText = "";
   timerCounter.innerHTML = "";
   stopTimer();
   stats.innerHTML = `Round Number: ${roundCounter} Shots Fired: ${totalShots} Current Points: ${currentScore} Target Score: ${scoreGoal} Total Points: ${storedScore} Accuracy: ${(
@@ -172,6 +166,7 @@ const resetClicked = () => {
   ).toFixed(3)}%`;
 };
 
+target.addEventListener("click", scoreIncrease);
 startButton.addEventListener("click", startClicked);
 resetButton.addEventListener("click", resetClicked);
 gameContainer.addEventListener("click", bulletShot);

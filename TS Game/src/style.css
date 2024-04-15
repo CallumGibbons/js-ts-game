@@ -25,7 +25,7 @@ h1 {
 }
 
 #gameContainer {
-  position: inherit;
+  position:inherit;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -35,14 +35,6 @@ h1 {
   background: rgba(255, 255, 255, 0.5);
   overflow: hidden;
   box-shadow: 0 0 50px 5px #d904ffc2;
-  .gameText {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: none;
-    color: red;
-    font-size: 3em;
     h2 {
       top: 50%;
       left: 50%;
@@ -54,7 +46,7 @@ h1 {
       font-size: 100px;
       z-index: 0;
     }
-  }
+  
   img {
     height: 100%;
     top: 50%;
@@ -71,6 +63,16 @@ h1 {
       width: 100%;
     }
   }
+}
+.gameText {
+  /* Existing styles... */
+  position:absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  color: red;
+  font-size: 3em;
 }
 .crosshair {
   z-index: 2;
