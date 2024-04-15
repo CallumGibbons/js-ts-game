@@ -67,7 +67,7 @@ const roundPass = () => {
   isPaused = true;
   isTargetHittable = false;
   roundCounter += 1;
-  currentScore = 0; // Reset current score to zero
+  currentScore = 0;
   difficultyScale -= 0.1;
   stopTimer();
   setTimeout(() => {
@@ -102,6 +102,11 @@ const gameRunning = () => {
       stopGame();
     } else if (currentScore >= scoreGoal) {
       roundPass();
+    } else if (
+      totalShots > 10 &&
+      (storedScore / (totalShots * targetScore)) * 100 < 60
+    ) {
+      stopGame();
     }
   }
 };
@@ -138,7 +143,7 @@ const startClicked = () => {
   setInterval(gameRunning, 1000);
 };
 
-// Event handler for target hit
+// Event handler for gun shot
 const bulletShot = () => {
   if (!isPaused && isTargetHittable) {
     totalShots++;
